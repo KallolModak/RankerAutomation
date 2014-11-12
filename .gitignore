@@ -8,3 +8,4 @@ buildlogs
 **/test-output/
 *.settings
 *.log
+**/testdependency.properties
