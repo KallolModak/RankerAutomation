@@ -1,0 +1,10 @@
+*.class
+bin
+test-output
+build
+buildlogs
+*.metadata
+**/Automation Reports/
+**/test-output/
+*.settings
+*.log
