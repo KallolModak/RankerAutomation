@@ -4,7 +4,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import com.paeobjects.home.Commonpage;
+import com.paeobjects.home.Home;
+import com.pageobject.login.FBAPI;
+import com.pageobject.login.ForgotPassword;
+import com.pageobject.login.GooglePlusAPI;
+import com.pageobject.login.TwitterAPI;
 import com.pageobject.search.SearchRanker;
+import com.utilities.TimeOuts;
 
 public class NavBar extends Commonpage{
 	
@@ -38,6 +44,10 @@ public class NavBar extends Commonpage{
 	
 	private By overlaySports(){
 		return By.xpath("//ul[@class='float relative lowercase main']//a[text()=' Sports']");
+	}
+	
+	private By signIn(){
+		return By.xpath("//span[text()='sign in']");
 	}
 	
 	private By people(){
@@ -131,6 +141,80 @@ public class NavBar extends Commonpage{
 	private By searchBtn(){
 		return By.xpath("//span[@class='relative block icon search grey']");
 	}
+	
+	private By searchBox(){
+		return By.id("globalSearchInput");
+	}
+	
+	private By createList(){
+		return By.xpath("//span[text()='create a list']");
+	}
+	
+	private By joining(){
+		return By.linkText("Joining is easy.");
+	}
+	
+	private By forgotPwd(){
+		return By.id("loginForgotPassword");
+	}
+	
+	private By signupEmail(){
+		return By.xpath("//img[contains(@src, 'signup_mail')]");
+	}
+	
+	private By signUpFB(){
+		return By.xpath("//img[contains(@src,'signup_facebook')]");
+	}
+	
+	private By signUpTwitter(){
+		return By.xpath("//img[contains(@src,'signup_twitter')]");
+	}
+	
+	private By signUpGPlus(){
+		return By.xpath("//img[contains(@src,'signup_google')]");
+	}
+	
+	
+	
+													/*Reistration*/
+	
+	private By userName(){
+		return By.id("loginUser");
+	}
+	
+	private By email(){
+		return By.id("loginEmail");
+	}
+	
+	private By password(){
+		return By.id("loginPass");
+	}
+	
+	private By signInBtn(){
+		return By.id("loginButton");
+	}
+	
+	private By termsAgree(){
+		return By.id("signupAgree");
+	}
+	
+	private By signUp(){
+		return By.id("signupButton");
+	}
+	
+	private By unameErrorMSG(){
+		return By.id("loginUserMess");
+	}
+	
+	private By emailErrorMSG(){
+		return By.id("loginEmailMess");
+	}
+	
+	private By pwdErrorMSG(){
+		return By.id("loginPassMess");
+	}
+	
+	
 	
 	
 	/******************************Safe operations**************************/
@@ -318,4 +402,83 @@ public class NavBar extends Commonpage{
 		return new SearchRanker(driver);
 	}
 	
+	public void enterSearchText(String strText){
+		safeType(searchBox(), strText);
+	}
+	
+	public CreateList clickOnCreatelist(){
+		safeClick(createList());
+		return new CreateList(driver);
+	}
+	
+	public void clickSignin(){
+		safeClick(signIn(), TimeOuts.LONGWAIT);
+	}
+	
+	public void clickOnJoining(){
+		safeClick(joining());
+	}
+	
+	public void clickSignupByEmail(){
+		safeClick(signupEmail());
+	}
+	
+	public FBAPI clickSinupByFB(){
+		safeClick(signUpFB());
+		return new FBAPI(driver);
+	}
+	
+	public TwitterAPI clickSinupBytwitter(){
+		safeClick(signUpTwitter());
+		return new TwitterAPI(driver);
+	}
+	
+	public GooglePlusAPI clickSinupByGPlus(){
+		safeClick(signUpGPlus());
+		return new GooglePlusAPI(driver);
+	}
+	
+	public void enterregistrationdetails(String uname, String email, String pwd){
+		safeType(userName(),uname);
+		safeType(email(),email);
+		safeType(password(),pwd);
+		safeCheck(termsAgree());
+	}
+	
+	public String verifyUnameError(){
+		return waitForText(unameErrorMSG(),MEDIUMWAIT);
+	}
+	
+	public String verifyEmailError(){
+		return waitForText(emailErrorMSG(),MEDIUMWAIT);
+	}
+	
+	public String verifyPWDError(){
+		return waitForText(pwdErrorMSG(),MEDIUMWAIT);
+	}
+	
+	public Home clickOnSinup(){
+		safeClick(signUp());
+		return new Home(driver);
+	}
+	
+	public ForgotPassword clickForgotPwd(){
+		safeClick(forgotPwd(), MEDIUMWAIT);
+		return new ForgotPassword(driver);
+	}
+	
+	public void enterCredentels(String strUName, String strPwd){
+		safeType(userName(), strUName);
+		safeType(password(), strPwd);
+		
+	}
+	
+	public Home clickSignIn(){
+		safeClick(signInBtn(), MEDIUMWAIT);
+		return new Home(driver);
+	}
+	
+	public void clicksignin(){
+		safeClick(signInBtn(), MEDIUMWAIT);
+	}
 }

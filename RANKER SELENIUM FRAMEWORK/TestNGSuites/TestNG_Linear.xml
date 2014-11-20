@@ -9,7 +9,7 @@
 <!-- To run entire tests in linear mode -->
    <test name="RunTests">
        <classes>
-        	<class name="com.testsuite.login.Signin"/>
+        	<class name="com.testsuite.navbar.SigninAndRegistration"/>
 			<class name="com.testsuite.navbar.NavBarTest"/> 
        </classes> 
     </test>    

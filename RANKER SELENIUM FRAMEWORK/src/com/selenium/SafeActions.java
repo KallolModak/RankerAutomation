@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -61,27 +62,49 @@ public class SafeActions extends Sync
 	 */
 	public void safeClick(By locator, int... optionWaitTime)
 	{
+		WebElement element = null;
 		try
 		{
 			int waitTime =  getWaitTime(optionWaitTime);
 			if(waitUntilClickable(locator, waitTime))
 			{
 				scrollIntoElementView(locator);
-				WebElement element = driver.findElement(locator);
+				element = driver.findElement(locator);
 				setHighlight(element);
 				element.click();		
 				log.info("Clicked on the element " + locator);
 			}
 			else
 			{
-				log.error("Unable to click the element " + locator+UtilityMethods.getStackTrace());
-				Assert.fail("Unable to click the element " + locator+UtilityMethods.getStackTrace());
+//				log.error("Unable to click the element " + locator+UtilityMethods.getStackTrace());
+//				Assert.fail("Unable to click the element " + locator+UtilityMethods.getStackTrace());
+				try
+				{
+					Thread.sleep(IMPLICITWAIT);
+					element.click();
+				}
+				catch (Exception e) {
+					log.error("Unable to click the element " + locator+UtilityMethods.getStackTrace());
+					Assert.fail("Unable to click the element " + locator+UtilityMethods.getStackTrace());
+				}
 			}
 		}
 		catch(StaleElementReferenceException e)
 		{
-			log.error("Element with " + locator + " is not attached to the page document"+UtilityMethods.getStackTrace());
-			Assert.fail("Element with " + locator + " is not attached to the page document"+UtilityMethods.getStackTrace());
+			try
+			{
+				element.click();
+			}catch (Exception ee) {
+				try{
+				refresh();
+				Thread.sleep(IMPLICITWAIT);
+				element.click();
+				}catch(Exception eee)
+				{
+					log.error("Element with " + locator + " is not attached to the page document"+UtilityMethods.getStackTrace());
+					Assert.fail("Element with " + locator + " is not attached to the page document"+UtilityMethods.getStackTrace());
+				}
+			}
 		}
 		catch (NoSuchElementException e)
 		{
@@ -2055,7 +2078,7 @@ public class SafeActions extends Sync
 	        executor.executeScript("arguments[0].setAttribute('style', arguments[1]);", element, attributevalue);
 	        try 
 	        {
-				Thread.sleep(100);
+				Thread.sleep(100); 
 			} 
 	        catch (InterruptedException e) 
 			{
@@ -2133,6 +2156,37 @@ public class SafeActions extends Sync
 	
 	/**
 	 * 
+	 * This method is used to switch to new window.
+	 *
+	 * @param num , Window number starting at 0
+	 */
+	public void switchToNewWindow()
+	{
+		try
+		{
+			Set<String> windowHandles=driver.getWindowHandles();
+			int numWindow = windowHandles.size();
+			if(numWindow<2){
+				log.error("new window is not available window count : "+numWindow);
+				Assert.fail("new window is not available window count : "+numWindow+" Please check the window count or wait until the new window appears");
+			}
+			String window=driver.getWindowHandle();
+			for(String windowHandle:windowHandles){
+				if(!windowHandle.equals(window)){
+					driver.switchTo().window(windowHandle);
+					log.info("Navigated succesfsully to new window");
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			log.error("new window is may not available Please check the window count or wait until the new window appears");
+			Assert.fail("new window is not available Please check the window count or wait until the new window appears");			
+		}
+	}
+	
+	/**
+	 * 
 	 * This method is used to refresh the web page
 	 *
 	 */
@@ -2196,7 +2250,14 @@ public class SafeActions extends Sync
 		String sUrl = null;
 		try
 		{
+			int i=0;
+			while(sUrl==null||sUrl.length()==00)
+			{
 			sUrl = driver.getCurrentUrl();
+			i++;
+			if(i>15)break;
+			}
+			log.info("url : "+sUrl);
 		}
 		catch(Exception e)
 		{
@@ -2308,4 +2369,16 @@ public class SafeActions extends Sync
 		}
 		return list;
 	}
+	
+	public String waitForText(By locator, int wait){
+		String s="";
+		for(int i=0;i<10;i++){
+			s=safeGetText(locator, MEDIUMWAIT);
+			if(s.length()>0)
+			break;
+			else try{Thread.sleep(50);}catch(Exception e){}
+		}
+		return s;
+	}
+	
 }

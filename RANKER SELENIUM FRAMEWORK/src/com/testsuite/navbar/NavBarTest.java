@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import com.base.BaseSetup;
 import com.dataprovider.ConfigManager;
+import com.paeobjects.navbar.CreateList;
 import com.paeobjects.navbar.Film;
 import com.paeobjects.navbar.Music;
 import com.paeobjects.navbar.NavBar;
@@ -17,6 +18,8 @@ import com.paeobjects.navbar.TV;
 import com.paeobjects.navbar.Videos;
 import com.pageobject.login.AuthLoginPage;
 import com.pageobject.search.SearchRanker;
+import com.pageobjects.list.ListAwesomeness;
+import com.utilities.UtilityMethods;
 
 public class NavBarTest extends BaseSetup{
 
@@ -370,10 +373,35 @@ public class NavBarTest extends BaseSetup{
 		
 	}
 	
-//	@Test(priority=16)
+	@Test(priority=16)
 	public void SearchBar_emptysearch(){
 		NavBar navbar=new NavBar(getDriver());
 		SearchRanker search=navbar.clickOnsearch();
+		Assert.assertTrue(search.verifySearchbox(), "Big seacrch bar");
+		Assert.assertEquals(search.getCurrentURL().replaceAll("+", " "), config.getProperty("Url")+"app/search.htm?q=", "Search url");
+	}
+	
+	@Test(priority=17)
+	public void SearchBar_nonemptysearch() {
+		NavBar navbar=new NavBar(getDriver());
+		String txt=UtilityMethods.getOSName();
+		navbar.enterSearchText(txt);
+		SearchRanker search=navbar.clickOnsearch();
+		Assert.assertEquals(search.getCurrentURL(), config.getProperty("Url")+"app/search.htm?q="+txt, "Search url");
+		
+		
+	}
+	
+	@Test(priority=18)
+	public void CreateaListnolisttitle() {
+		NavBar navbar=new NavBar(getDriver());
+		CreateList createlist=navbar.clickOnCreatelist();
+		ListAwesomeness list=createlist.clickOnSkip();
+		//verify list awesomeness
+		Assert.assertTrue(list.verifyListName());
+		list=createlist.clickOnCreate();
+		//verify list awesomeness
+		Assert.assertTrue(list.verifyListName());
 	}
 	
 }
