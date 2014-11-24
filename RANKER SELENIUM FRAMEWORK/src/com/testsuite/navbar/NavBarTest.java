@@ -1,7 +1,6 @@
 package com.testsuite.navbar;
 
 import org.testng.Assert;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -16,23 +15,15 @@ import com.paeobjects.navbar.People;
 import com.paeobjects.navbar.Sports;
 import com.paeobjects.navbar.TV;
 import com.paeobjects.navbar.Videos;
-import com.pageobject.login.AuthLoginPage;
 import com.pageobject.search.SearchRanker;
 import com.pageobjects.list.ListAwesomeness;
 import com.utilities.UtilityMethods;
+import com.utilities.UtilityMethods.Mode;
 
 public class NavBarTest extends BaseSetup{
 
 	ConfigManager config=new ConfigManager();
 	
-	@BeforeClass
-	public void classSetUp(){
-		
-		AuthLoginPage authlpg=new AuthLoginPage(getDriver());
-		getDriver().get(new ConfigManager().getProperty("Url"));
-		authlpg.enterCredentels(config.getProperty("Authuname"), config.getProperty("Authpwd"));
-		authlpg.clickSubmit();
-	}
 	@BeforeMethod
 	public void beforeMethod(){
 		if(!getDriver().getCurrentUrl().equals(new ConfigManager().getProperty("Url")))
@@ -378,13 +369,13 @@ public class NavBarTest extends BaseSetup{
 		NavBar navbar=new NavBar(getDriver());
 		SearchRanker search=navbar.clickOnsearch();
 		Assert.assertTrue(search.verifySearchbox(), "Big seacrch bar");
-		Assert.assertEquals(search.getCurrentURL().replaceAll("+", " "), config.getProperty("Url")+"app/search.htm?q=", "Search url");
+		Assert.assertEquals(search.getCurrentURL(), config.getProperty("Url")+"app/search.htm?q=", "Search url");
 	}
 	
 	@Test(priority=17)
 	public void SearchBar_nonemptysearch() {
 		NavBar navbar=new NavBar(getDriver());
-		String txt=UtilityMethods.getOSName();
+		String txt=UtilityMethods.generateRandomString(10, Mode.ALPHANUMERIC);
 		navbar.enterSearchText(txt);
 		SearchRanker search=navbar.clickOnsearch();
 		Assert.assertEquals(search.getCurrentURL(), config.getProperty("Url")+"app/search.htm?q="+txt, "Search url");

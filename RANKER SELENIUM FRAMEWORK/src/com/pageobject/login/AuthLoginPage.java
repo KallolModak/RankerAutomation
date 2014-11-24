@@ -14,7 +14,7 @@ public class AuthLoginPage extends SafeActions{
 	public AuthLoginPage(WebDriver driver) {
 		super(driver);
 		this.driver=driver;
-//		config=new ConfigManager();
+		config=new ConfigManager();
 	}
 	
 	private By submitBth(){
@@ -40,6 +40,12 @@ public class AuthLoginPage extends SafeActions{
 	public SigninPage clickSubmit(){
 		safeClick(submitBth());
 		return new SigninPage(driver);
+	}
+	
+	public void authLogin(){
+		driver.get(new ConfigManager().getProperty("Url"));
+		enterCredentels(config.getProperty("Authuname"), config.getProperty("Authpwd"));
+		clickSubmit();
 	}
 
 }

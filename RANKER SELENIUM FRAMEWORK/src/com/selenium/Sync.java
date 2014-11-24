@@ -509,6 +509,26 @@ public class Sync implements TimeOuts
     	return isDisplayed;
     }
     
+    public boolean isElementNotDisplayed(By locator)
+    {
+    	log.info("Verifying if element " + locator+ " is not displayed");
+    	boolean isDisplayed = false;
+    	setImplicitWait(0);
+    	
+    	try
+    	{
+    		if(isElementPresent(locator, VERYSHORTWAIT))
+	    	{
+	    		isDisplayed = driver.findElement(locator).isDisplayed();	
+	    	}
+    	} 
+ 		catch (Exception e)
+ 		{
+ 			log.error("Exception occured while determining state of " + locator +UtilityMethods.getStackTrace());			
+ 		}	
+    	return !(isDisplayed);
+    }
+    
     public boolean isElementEnabled(By locator)
     {
     	log.info("Verifying if element " + locator+ " is enabled");

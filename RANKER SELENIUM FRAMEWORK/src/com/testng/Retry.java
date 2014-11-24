@@ -3,9 +3,10 @@ package com.testng;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
 
+import com.base.BaseSetup;
 import com.dataprovider.ConfigManager;
 
-public class Retry implements IRetryAnalyzer
+public class Retry extends BaseSetup implements IRetryAnalyzer
 {
 	public int retryCount = 0;
 	public int maxRetryCount = Integer.parseInt(new ConfigManager().getProperty("RetryCount"));

@@ -39,12 +39,8 @@ public class Home extends SafeActions{
 		safeClick(close(), MEDIUMWAIT);
 	}
 	public NavBar doLogout(){
+		try{Thread.sleep(5000);}catch (Exception e) {}
 		mouseHover(userLogo(), MEDIUMWAIT);
-		if(!isElementDisplayed(logout()))
-			{
-			try{Thread.sleep(2000);}catch (Exception e) {}
-			mouseHover(userLogo(), MEDIUMWAIT);
-			}
 		safeClick(logout(), MEDIUMWAIT);
 		return new NavBar(driver);
 	}

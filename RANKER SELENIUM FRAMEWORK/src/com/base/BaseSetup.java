@@ -20,17 +20,21 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 import com.dataprovider.ConfigManager;
 import com.listener.WebListener;
+import com.pageobject.login.AuthLoginPage;
 import com.selenium.Sync;
 import com.utilities.ReportSetup;
 import com.utilities.TimeOuts;
@@ -42,7 +46,7 @@ public class BaseSetup implements TimeOuts
 	private boolean isReportFolderCreated = true;
 	private Logger log = Logger.getLogger("BaseClass");	
 	private MyEventFiringWebDriver efDriver;
-	ConfigManager sys = new ConfigManager();
+	public ConfigManager config = new ConfigManager();
 	ConfigManager app = new ConfigManager("App");
 	ConfigManager test = new ConfigManager("TestDependency");
 
@@ -96,19 +100,68 @@ public class BaseSetup implements TimeOuts
 	{
     	try
     	{
-    		browserType=sys.getProperty("Browser.Name");
+    		if(getDriver()==null)
+    		{
+    		browserType=config.getProperty("Browser.Name");
 	    	initiateDriver(browserType);
 	    	log.info("Initiated Webdriver...");
 	    	context.setAttribute("driver", driver);		
 			driver.manage().window().maximize();
 			setPageLoadTimeOut(VERYLONGWAIT);
 			(new Sync(driver)).setImplicitWait(IMPLICITWAIT);
+    		}
     	}
     	catch (Exception e)
     	{		    		
        		log.error(e.getMessage() +"---"+UtilityMethods.getStackTrace());
     	}
+    	
 	}
+    
+    @BeforeClass(dependsOnMethods={"initializeBaseSetup"})
+	public void classSetUp(){
+		
+		AuthLoginPage authlpg=new AuthLoginPage(getDriver());
+		authlpg.authLogin();
+	}
+    
+    @Parameters("browserType")
+    @BeforeMethod
+    public void reLaunch(@Optional() String browserType,ITestContext context){
+    	try
+    	{
+    		if(driver==null)
+    		{
+//    			if(config.getProperty("Relaunch").equals("true")){
+	    		browserType=config.getProperty("Browser.Name");
+		    	initiateDriver(browserType);
+		    	log.info("Initiated Webdriver...");
+		    	context.setAttribute("driver", driver);		
+				driver.manage().window().maximize();
+				setPageLoadTimeOut(VERYLONGWAIT);
+				(new Sync(driver)).setImplicitWait(IMPLICITWAIT);
+				AuthLoginPage authlpg=new AuthLoginPage(getDriver());
+	    		authlpg.authLogin();
+//    			}
+    		}
+    	}
+    	catch (Exception e)
+    	{		    		
+       		log.error(e.getMessage() +"---"+UtilityMethods.getStackTrace());
+    	}
+    }
+    @AfterMethod(alwaysRun=true)
+    public void quit(ITestResult result){
+    	System.out.println(result.getStatus());
+    	if(config.getProperty("Relaunch").equals("true"))
+    	{
+	    	if(result.getStatus()==2){
+	    		driver.quit();
+	    		driver=null;
+	    	}
+    	}
+    	
+    }
 
 
     /**
@@ -119,12 +172,12 @@ public class BaseSetup implements TimeOuts
 	{
 		//String browserType = sys.getProperty("Browser.Name").toLowerCase();			
 		log.info("Browser name present in config file :" + browserType);		   				
-		if(sys.getProperty("ModeOfExecution").equalsIgnoreCase("remote"))
+		if(config.getProperty("ModeOfExecution").equalsIgnoreCase("remote"))
 		{
 			log.info("-----------------STARTED RUNNING SELENIUM TESTS ON CLOUD /GRID------------------");
 			setDriver(new RemoteDriver().init(browserType));
 		}
-		else if(sys.getProperty("ModeOfExecution").equalsIgnoreCase("linear"))
+		else if(config.getProperty("ModeOfExecution").equalsIgnoreCase("linear"))
 		{
 			log.info("-----------------STARTED RUNNING SELENIUM TESTS ON LOCAL MACHINE------------------");
 			setDriver(browserType);				

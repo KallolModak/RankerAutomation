@@ -1520,7 +1520,7 @@ public class SafeActions extends Sync
 	 * @return
 	 * @throws Exception
 	 */
-	public void safeJavaScriptClick(By locator, int waitTime) throws Exception
+	public void safeJavaScriptClick(By locator, int waitTime)
 	{
 		try
 		{

@@ -1,6 +1,7 @@
 package com.paeobjects.navbar;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import com.paeobjects.home.Commonpage;
@@ -163,7 +164,7 @@ public class NavBar extends Commonpage{
 	}
 	
 	private By signUpFB(){
-		return By.xpath("//img[contains(@src,'signup_facebook')]");
+		return By.xpath("//img[contains(@src, 'signup_facebook')]");
 	}
 	
 	private By signUpTwitter(){
@@ -424,7 +425,10 @@ public class NavBar extends Commonpage{
 	}
 	
 	public FBAPI clickSinupByFB(){
-		safeClick(signUpFB());
+//		safeClick(signUpFB());
+//		JavascriptExecutor js=(JavascriptExecutor)driver;
+//		js.executeScript("document.getElementByClassName('float block rpxFacebook socialAuth socialAuthFacebook pointer')");
+		safeJavaScriptClick(signUpFB(), VERYLONGWAIT);
 		return new FBAPI(driver);
 	}
 	
@@ -434,7 +438,8 @@ public class NavBar extends Commonpage{
 	}
 	
 	public GooglePlusAPI clickSinupByGPlus(){
-		safeClick(signUpGPlus());
+//		safeClick(signUpGPlus());
+		safeJavaScriptClick(signUpGPlus(), LONGWAIT);
 		return new GooglePlusAPI(driver);
 	}
 	
@@ -468,9 +473,13 @@ public class NavBar extends Commonpage{
 	}
 	
 	public void enterCredentels(String strUName, String strPwd){
-		safeType(userName(), strUName);
-		safeType(password(), strPwd);
+		safeClearAndType(userName(), strUName);
+		safeClearAndType(password(), strPwd);
 		
+	}
+	
+	public boolean isSigninNotPresent(){
+		return isElementNotDisplayed(signInBtn());
 	}
 	
 	public Home clickSignIn(){
