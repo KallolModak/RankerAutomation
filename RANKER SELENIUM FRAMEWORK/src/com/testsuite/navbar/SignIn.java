@@ -10,7 +10,10 @@ import com.base.BaseSetup;
 import com.dataprovider.ConfigManager;
 import com.paeobjects.home.Home;
 import com.paeobjects.navbar.NavBar;
+import com.pageobject.login.FBAPI;
 import com.pageobject.login.ForgotPassword;
+import com.pageobject.login.GooglePlusAPI;
+import com.pageobject.login.TwitterAPI;
 import com.utilities.UtilityMethods;
 import com.utilities.UtilityMethods.Mode;
 
@@ -40,7 +43,7 @@ public class SignIn extends BaseSetup{
 	public void SignIn_leavingpasswordblank() throws Exception{
 		NavBar navbar=new NavBar(getDriver());
 		navbar.clickSignin();
-		navbar.clickSignIn();
+		navbar.clickSignInBtn();
 		//verify
 		Alert alert=getDriver().switchTo().alert();
 		Assert.assertEquals(alert.getText(), AppGlobalVariables.WARNING_EMPTY_CREDENTIALS, "verify warning message");
@@ -53,7 +56,7 @@ public class SignIn extends BaseSetup{
 		if(navbar.isSigninNotPresent())
 		navbar.clickSignin();
 		navbar.enterCredentels(AppGlobalVariables.USER, UtilityMethods.generateRandomString(6, Mode.ALPHANUMERIC));
-		navbar.clicksignin();
+		navbar.clicksigninBtn();
 		//verify
 		Assert.assertEquals(navbar.verifyPWDError(), AppGlobalVariables.ERROR_WRONG_PASSWORD, "verify error message");
 	}
@@ -64,22 +67,45 @@ public class SignIn extends BaseSetup{
 		if(navbar.isSigninNotPresent())
 		navbar.clickSignin();
 		navbar.enterCredentels(AppGlobalVariables.USER,AppGlobalVariables.PASSWORD);
-		Home home=navbar.clickSignIn();
+		Home home=navbar.clickSignInBtn();
 		//verify login
 		Assert.assertTrue(home.veriifyUserLogo(), "verify login");
 //		home.doLogout();
 	}
 	
-//	@Test(priority=5)
+	@Test(priority=5)
 	public void SignIn_Facebook() throws Exception{
 		NavBar navbar=new NavBar(getDriver());
 		navbar.clickSignin();
-		navbar.clickSinupByFB();
-		
-		navbar.clicksignin();
-		//verify
-		Alert alert=getDriver().switchTo().alert();
-		Assert.assertEquals(alert.getText(), AppGlobalVariables.WARNING_EMPTY_CREDENTIALS, "verify warning message");
-		alert.accept();
+		FBAPI fbapi=navbar.clickSinupByFB();
+		//Verify Facebook API page URL
+		Assert.assertTrue(fbapi.verifyFBHeader(), "FB header");
+		Assert.assertTrue(fbapi.getCurrentURL().toLowerCase().contains(AppGlobalVariables.API_FACEBOOKURL), "Verify FB API url");
+		getDriver().close();
+		getDriver().switchTo().window(getDriver().getWindowHandles().toArray()[0].toString());
+	}
+	
+	@Test(priority=6)
+	public void SignIn_Twitter() throws Exception{
+		NavBar navbar=new NavBar(getDriver());
+		navbar.clickSignin();
+		TwitterAPI twiterapi=navbar.clickSinupBytwitter();
+		//Verify Twitter API page URL
+		Assert.assertTrue(twiterapi.verifyTwitterHeader(), "Twitter header");
+		Assert.assertTrue(twiterapi.getCurrentURL().toLowerCase().contains(AppGlobalVariables.API_TWITTERURL), "Verify Twitter API url");
+		getDriver().close();
+		getDriver().switchTo().window(getDriver().getWindowHandles().toArray()[0].toString());
+	}
+	
+	@Test(priority=7)
+	public void SignIn_GooglePlus() throws Exception{
+		NavBar navbar=new NavBar(getDriver());
+		navbar.clickSignin();
+		GooglePlusAPI gpapi=navbar.clickSinupByGPlus();
+		//Verify Google+ API page URL
+		Assert.assertTrue(gpapi.verifyGPluslogo(), "Google+ header");
+		Assert.assertTrue(gpapi.getCurrentURL().toLowerCase().contains(AppGlobalVariables.API_GPLUS), "Verify Goole+ API url");
+		getDriver().close();
+		getDriver().switchTo().window(getDriver().getWindowHandles().toArray()[0].toString());
 	}
 }

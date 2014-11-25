@@ -18,6 +18,10 @@ public class CreateList extends SafeActions{
 		return By.id("createSubmit");
 	}
 	
+	private By listName(){
+		return By.xpath("//input[@id='createName']");
+	}
+	
 	public CreateList(WebDriver driver){
 		super(driver);
 		this.driver=driver;
@@ -32,6 +36,10 @@ public class CreateList extends SafeActions{
 	public ListAwesomeness clickOnCreate(){
 		safeClick(createList());
 		return new ListAwesomeness(driver);
+	}
+	
+	public void enterListName(String strName){
+		safeType(listName(), strName);
 	}
 	
 

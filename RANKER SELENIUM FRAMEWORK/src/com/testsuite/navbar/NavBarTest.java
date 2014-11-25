@@ -380,19 +380,5 @@ public class NavBarTest extends BaseSetup{
 		SearchRanker search=navbar.clickOnsearch();
 		Assert.assertEquals(search.getCurrentURL(), config.getProperty("Url")+"app/search.htm?q="+txt, "Search url");
 		
-		
 	}
-	
-	@Test(priority=18)
-	public void CreateaListnolisttitle() {
-		NavBar navbar=new NavBar(getDriver());
-		CreateList createlist=navbar.clickOnCreatelist();
-		ListAwesomeness list=createlist.clickOnSkip();
-		//verify list awesomeness
-		Assert.assertTrue(list.verifyListName());
-		list=createlist.clickOnCreate();
-		//verify list awesomeness
-		Assert.assertTrue(list.verifyListName());
-	}
-	
 }

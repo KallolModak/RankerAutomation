@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 import com.base.BaseSetup;
 import com.dataprovider.ConfigManager;
 import com.pageobject.login.AuthLoginPage;
-import com.pageobject.login.HomePage;
+import com.pageobject.login.ProfilePage;
 import com.pageobject.login.SigninPage;
 
 public class Signin extends BaseSetup{
@@ -27,7 +27,7 @@ public class Signin extends BaseSetup{
 	public void logInITest() throws Exception{
 		signpg.clickSignin();
 		signpg.enterCredentels("ramnavuluri","bhanu1071");
-		HomePage hmpge=signpg.clickSubmit();
+		ProfilePage hmpge=signpg.clickSubmit();
 		//verify login
 		}
 }

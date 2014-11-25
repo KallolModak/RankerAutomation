@@ -48,9 +48,9 @@ public class SigninPage extends SafeActions{
 		safeType(password(), strPwd);
 		
 	}
-	public HomePage clickSubmit(){
+	public ProfilePage clickSubmit(){
 		safeClick(btnSignin());
-		return new HomePage(driver);
+		return new ProfilePage(driver);
 	}
 
 	

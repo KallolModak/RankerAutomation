@@ -217,7 +217,6 @@ public class NavBar extends Commonpage{
 	
 	
 	
-	
 	/******************************Safe operations**************************/
 	public New clickNew(){
 		safeClick(newlnk(),LONGWAIT);
@@ -482,12 +481,12 @@ public class NavBar extends Commonpage{
 		return isElementNotDisplayed(signInBtn());
 	}
 	
-	public Home clickSignIn(){
+	public Home clickSignInBtn(){
 		safeClick(signInBtn(), MEDIUMWAIT);
 		return new Home(driver);
 	}
 	
-	public void clicksignin(){
+	public void clicksigninBtn(){
 		safeClick(signInBtn(), MEDIUMWAIT);
 	}
 }

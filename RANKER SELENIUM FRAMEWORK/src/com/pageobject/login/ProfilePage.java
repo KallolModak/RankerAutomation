@@ -7,19 +7,27 @@ import org.testng.Assert;
 import com.dataprovider.ConfigManager;
 import com.selenium.SafeActions;
 
-public class HomePage extends SafeActions{
+public class ProfilePage extends SafeActions{
 	
 	private WebDriver driver;
 	
 	private By profileLogo(){
 		return By.id("userProfileImg");
 	}
+	
+	private By ProfileImage(){
+		return By.id("profileImg");
+	}
 	private ConfigManager config;
-	public HomePage(WebDriver driver) {
+	public ProfilePage(WebDriver driver) {
 		super(driver);
 		config=new ConfigManager();
 		this.driver=driver;
 		Assert.assertTrue(isElementPresent(profileLogo()),"Profile page");
+	}
+	
+	public boolean verifyProfileImage(){
+		return isElementPresent(ProfileImage());
 	}
 
 }

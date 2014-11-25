@@ -13,6 +13,13 @@ public class ListAwesomeness extends SafeActions{
 	private By nameMyList(String lstName){
 		return By.xpath("//span[text()='"+lstName+"']");
 	}
+	private By closeCreateLst(){
+		return By.xpath("//span[@id='UE_nav_close']");
+	}
+	
+	private By closePopup(){
+		return By.xpath("//button[@title='close']");
+	}
 	
 	public ListAwesomeness(WebDriver driver){
 		super(driver);
@@ -27,6 +34,14 @@ public class ListAwesomeness extends SafeActions{
 			}
 		else
 			lstNm=lstName[0];
-		return isElementPresent(nameMyList(lstNm), LONGWAIT);
+		return isElementDisplayed(nameMyList(lstNm));
+	}
+	
+	public void clickCloseLst(){
+		safeClick(closeCreateLst(), VERYLONGWAIT);
+	}
+	
+	public void clickClosePopup(){
+		safeClick(closePopup());
 	}
 }

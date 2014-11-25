@@ -45,6 +45,10 @@ public class Home extends SafeActions{
 		return new NavBar(driver);
 	}
 	
+	public void clickUserLogo(){
+		safeClick(userLogo());
+	}
+	
 	
 
 }
