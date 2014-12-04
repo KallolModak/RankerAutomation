@@ -900,7 +900,7 @@ public class SafeActions extends Sync
 			    WebElement HoverElement = driver.findElement(locator);
 			    builder.moveToElement(HoverElement).build().perform();
 			    try {
-			    	Thread.sleep(2000);
+			    	Thread.sleep(3000);
 				} catch (InterruptedException e) {
 					log.error("Exception occurred while waiting"+UtilityMethods.getStackTrace());
 				}

@@ -446,7 +446,7 @@ public class Sync implements TimeOuts
 	* @throws Exception
 	*/
 	
-	public void waitForPageToLoad() throws Exception 
+	public void waitForPageToLoad()
 	{
 		log.info("Waiting for page to be loaded...");
 		try

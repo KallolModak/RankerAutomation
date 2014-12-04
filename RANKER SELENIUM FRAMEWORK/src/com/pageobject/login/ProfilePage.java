@@ -26,8 +26,8 @@ public class ProfilePage extends SafeActions{
 		Assert.assertTrue(isElementPresent(profileLogo()),"Profile page");
 	}
 	
-	public boolean verifyProfileImage(){
-		return isElementPresent(ProfileImage());
-	}
+//	public boolean verifyProfileImage(){
+//		return isElementPresent(ProfileImage());
+//	}
 
 }

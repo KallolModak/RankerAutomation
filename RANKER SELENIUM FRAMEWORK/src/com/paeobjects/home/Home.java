@@ -17,8 +17,6 @@ public class Home extends SafeActions{
 
 	private WebDriver driver;
 	
-	
-	
 	private By userLogo(){
 		return By.xpath("//img[@id='userProfileImg']");
 	}

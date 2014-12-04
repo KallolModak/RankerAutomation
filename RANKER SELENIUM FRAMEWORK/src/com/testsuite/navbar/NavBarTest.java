@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 
 import com.base.BaseSetup;
 import com.dataprovider.ConfigManager;
-import com.paeobjects.navbar.CreateList;
 import com.paeobjects.navbar.Film;
 import com.paeobjects.navbar.Music;
 import com.paeobjects.navbar.NavBar;
@@ -16,7 +15,6 @@ import com.paeobjects.navbar.Sports;
 import com.paeobjects.navbar.TV;
 import com.paeobjects.navbar.Videos;
 import com.pageobject.search.SearchRanker;
-import com.pageobjects.list.ListAwesomeness;
 import com.utilities.UtilityMethods;
 import com.utilities.UtilityMethods.Mode;
 
